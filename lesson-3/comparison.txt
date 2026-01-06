@@ -1,0 +1,10 @@
+Fat image:
+- Size: ~1.2GB
+- Layers: 6
+- Проблеми: великі системні пакети, зайві залежності
+- Пропозиції: multi-stage build, distroless
+
+Slim image:
+- Size: ~400MB
+- Layers: 4
+- Оптимізований для inference

@@ -1,0 +1,31 @@
+# ===== Builder stage =====
+FROM python:3.9-slim AS builder
+
+# Встановлюємо системні пакети для PyTorch
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential \
+    git \
+    curl \
+    libjpeg-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /install
+
+COPY requirements.txt .
+
+# Встановлюємо пакети у тимчасовий каталог
+RUN pip install --prefix=/install --no-cache-dir -r requirements.txt
+
+# ===== Runtime stage =====
+FROM python:3.9-slim
+
+# Копіюємо інстальовані пакети з builder
+COPY --from=builder /install /usr/local
+
+WORKDIR /app
+
+# Копіюємо модель і скрипт
+COPY model.pt inference.py . 
+
+# Команда за замовчуванням (можна викликати python inference.py <файл>)
+CMD ["python", "inference.py"]
