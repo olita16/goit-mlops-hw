@@ -1,0 +1,23 @@
+# Terraform cache
+.terraform/
+
+# State files
+*.tfstate
+*.tfstate.*
+
+# Variables (secrets/local config)
+terraform.tfvars
+*.tfvars
+
+# Plan files
+*.tfplan
+
+# Crash logs
+crash.log
+crash.*.log
+
+# Overrides
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json

@@ -1,19 +1,9 @@
-variable "vpc_name" {
-  default = "mlops-vpc"
-}
-
-variable "vpc_cidr" {
-  default = "10.0.0.0/16"
-}
-
-variable "azs" {
-  default = ["eu-central-1a", "eu-central-1b"]
-}
-
-variable "public_subnets" {
-  default = ["10.0.1.0/24", "10.0.2.0/24"]
-}
-
 variable "cluster_name" {
-  default = "ml-eks"
+  default = "demo-eks-cluster"
 }
+
+variable "region" {
+  default = "eu-central-1"
+}
+
+variable "state_bucket" {}

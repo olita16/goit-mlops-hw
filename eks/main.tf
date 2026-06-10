@@ -1,10 +1,9 @@
 data "terraform_remote_state" "vpc" {
   backend = "s3"
-
   config = {
-    bucket = "tf-state-olena-eks-2026"
+    bucket = var.state_bucket
     key    = "vpc/terraform.tfstate"
-    region = "eu-central-1"
+    region = var.region
   }
 }
 
@@ -14,33 +13,30 @@ module "eks" {
 
   cluster_name    = var.cluster_name
   cluster_version = "1.29"
-
-  vpc_id     = data.terraform_remote_state.vpc.outputs.vpc_id
-  subnet_ids = data.terraform_remote_state.vpc.outputs.public_subnets
+  
+  cluster_endpoint_public_access  = true
+  cluster_endpoint_private_access = true
 
   enable_cluster_creator_admin_permissions = true
 
-  eks_managed_node_groups = {
-    cpu = {
-      desired_size = 1
-      min_size     = 1
-      max_size     = 1
-      instance_types = ["t3.micro"]
+  vpc_id     = data.terraform_remote_state.vpc.outputs.vpc_id
+  subnet_ids  = data.terraform_remote_state.vpc.outputs.private_subnets
 
-      labels = {
-        workload = "cpu"
-      }
+  eks_managed_node_groups = {
+    cpu_group = {
+      instance_types = ["t3.micro"]
+      ami_type = "AL2_x86_64"
+      desired_size   = 1
+      min_size       = 1
+      max_size       = 2
     }
 
-    gpu = {
-      desired_size = 1
-      min_size     = 1
-      max_size     = 1
+    cpu_group_2 = {
       instance_types = ["t3.micro"]
-
-      labels = {
-        workload = "gpu"
-      }
+      ami_type = "AL2_x86_64"
+      desired_size   = 1
+      min_size       = 1
+      max_size       = 2
     }
   }
 }
