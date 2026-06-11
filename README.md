@@ -68,8 +68,14 @@ eks-vpc-cluster/
 ```bash
 cd vpc
 terraform init
+```
+![Terraform init](screenshots/vpc-terraform-init.png)
+
+```bash
 terraform apply
 ```
+![Terraform apply](screenshots/vpc-terraform-apply.png)
+
 
 ---
 
@@ -78,8 +84,13 @@ terraform apply
 ```bash
 cd eks
 terraform init
+```
+![EKS cluster](screenshots/eks-terraform-init.png)
+
+```bash
 terraform apply
 ```
+![EKS cluster](screenshots/eks-terraform-apply.png)
 
 ---
 
@@ -90,6 +101,7 @@ aws eks update-kubeconfig \
   --region eu-central-1 \
   --name demo-eks-cluster
 ```
+![kubectl](screenshots/kubectl.png)
 
 ---
 
@@ -98,8 +110,7 @@ aws eks update-kubeconfig \
 ```bash
 kubectl get nodes
 ```
-
-Очікувано: відображення двох node group.
+![Nodes](screenshots/kubectl-nodes.png)
 
 ---
 
@@ -108,7 +119,7 @@ kubectl get nodes
 - VPC створено через офіційний Terraform модуль
 - EKS розгорнуто всередині VPC
 - Node groups:
-  - CPU nodes (t3.micro / t2.micro)
+  - CPU nodes (t3.micro)
   - додаткові workload групи
 - Remote state зберігається у S3
 
@@ -155,7 +166,7 @@ terraform destroy
 
 ## Результат
 
-Після успішного застосування:
+Після успішного застосування описаних вище команд результат є наступним:
 
 - Створено VPC інфраструктуру
 - Розгорнуто EKS кластер
