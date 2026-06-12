@@ -39,7 +39,6 @@ module "eks" {
     })
   }
 
-
     kube-proxy = {
       most_recent = true
     }
@@ -71,9 +70,9 @@ module "eks" {
       instance_types = ["t3.small"]
       ami_type       = "AL2_x86_64"
 
-      desired_size = 0
-      min_size     = 0
-      max_size     = 0
+      desired_size = 2
+      min_size     = 2
+      max_size     = 3
 
       labels = {
         workload = "gpu"
