@@ -156,7 +156,7 @@ kubectl port-forward svc/argocd-server -n infra-tools 8080:443
 
 https://localhost:8080
 
-![ARGOUI](screenshots/agrocd-ui.png)
+![AgroCDUI](screenshots/argocd-ui.png)
 
 Оскільки ArgoCD використовує самопідписаний SSL-сертифікат, браузер може відобразити попередження про безпеку. У такому випадку необхідно обрати:
 
