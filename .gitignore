@@ -95,3 +95,4 @@ Thumbs.db
 
 argocd/aws-node.yaml
 
+*.tgz
