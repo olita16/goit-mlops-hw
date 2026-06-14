@@ -1,0 +1,6 @@
+mlflow
+scikit-learn
+pandas
+numpy
+prometheus-client
+boto3

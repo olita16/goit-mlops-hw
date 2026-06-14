@@ -1,13 +1,18 @@
+# ==========================
+# Terraform
+# ==========================
+
 # Terraform cache
 .terraform/
 
-# State files
+# Terraform state files
 *.tfstate
 *.tfstate.*
 
 # Variables (secrets/local config)
 terraform.tfvars
-*.tfvars
+*.auto.tfvars
+*.auto.tfvars.json
 
 # Plan files
 *.tfplan
@@ -16,13 +21,77 @@ terraform.tfvars
 crash.log
 crash.*.log
 
-# Overrides
+# Override files
 override.tf
 override.tf.json
 *_override.tf
 *_override.tf.json
 
+# Terraform lock file
 .terraform.lock.hcl
 
-.terraform.lock.hcl
+
+# ==========================
+# Python
+# ==========================
+
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+
+
+# ==========================
+# MLflow / MLOps
+# ==========================
+
+# Local MLflow artifacts
+mlruns/
+mlartifacts/
+
+
+# ==========================
+# IDE / Editors
+# ==========================
+
+.vscode/
+.idea/
+
+
+# ==========================
+# Operating System
+# ==========================
+
+.DS_Store
+Thumbs.db
+
+
+# ==========================
+# Logs
+# ==========================
+
+*.log
+
+
+# ==========================
+# Local archives/packages
+# ==========================
+
+*.zip
+*.tar
+*.tar.gz
+*.tgz
+
+
+# ==========================
+# Project-specific exclusions
+# ==========================
+
 argocd/aws-node.yaml
+

@@ -23,12 +23,8 @@ spec:
         postgresql:
           enabled: false
 
-        extraEnvVars:
-          AWS_ACCESS_KEY_ID: "minio"
-          AWS_SECRET_ACCESS_KEY: "minio123"
-          MLFLOW_S3_ENDPOINT_URL: "http://minio-mlflow.mlflow.svc.cluster.local:9000"
-          MLFLOW_BACKEND_STORE_URI: "postgresql://mlflow:mlflowpass@postgres-mlflow-postgresql.mlflow.svc.cluster.local:5432/mlflow"
-          MLFLOW_ARTIFACT_ROOT: "s3://mlflow-artifacts"
+        extraEnvVarsCM: mlflow-env-config
+        extraEnvVarsSecret: mlflow-env-secret
 
         extraArgs:
           backendStoreUri: "$(MLFLOW_BACKEND_STORE_URI)"
