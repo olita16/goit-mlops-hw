@@ -235,13 +235,14 @@ Succeeded
 ```yaml
 train-model:
   stage: train
-  image: amazon/aws-cli:2.15.0
-
+  image:
+    name: amazon/aws-cli:2.15.0
+    entrypoint: [""]
   script:
-    - aws stepfunctions start-execution \
-      --state-machine-arn "$STEP_FUNCTION_ARN" \
-      --name "train-$(date +%s)" \
-      --input '{"source":"gitlab-ci","commit":"'$CI_COMMIT_SHORT_SHA'"}'
+    - aws --version
+    - aws stepfunctions start-execution --state-machine-arn "$STEP_FUNCTION_ARN" --name "train-$(date +%s)" --input "{\"source\":\"gitlab-ci\",\"commit\":\"$CI_COMMIT_SHORT_SHA\"}"
+  only:
+    - lesson-10
 ```
 
 ### Принцип роботи GitLab CI
@@ -272,6 +273,8 @@ train-model:
 AWS_DEFAULT_REGION=eu-central-1
 ```
 
+![GitLab Variables](./screenshots/gitlub-var.png)
+
 ARN можна отримати командою:
 
 ```bash
@@ -280,23 +283,100 @@ terraform output -raw state_machine_arn
 
 ---
 
-## JSON, що передається через GitLab CI
+## Успішне виконання GitLab CI/CD Pipeline
 
-Під час запуску пайплайну передаються параметри у форматі JSON.
+Після налаштування GitLab CI/CD Variables та оновлення конфігурації `.gitlab-ci.yml` було успішно виконано автоматичний запуск пайплайну.
 
-Приклад:
+Під час виконання pipeline GitLab Runner:
 
-```json
-{
-  "source": "gitlab-ci",
-  "commit": "abc123"
-}
+1. Завантажив репозиторій із гілки `lesson-10`;
+2. Запустив job `train-model` з використанням офіційного Docker-образу AWS CLI:
+
+   ```text
+   amazon/aws-cli:2.15.0
+   ```
+
+3. Виконав команду запуску AWS Step Function:
+
+   ```bash
+   aws stepfunctions start-execution \
+     --state-machine-arn "$STEP_FUNCTION_ARN" \
+     --name "train-$(date +%s)" \
+     --input "{\"source\":\"gitlab-ci\",\"commit\":\"$CI_COMMIT_SHORT_SHA\"}"
+   ```
+
+4. Ініціював виконання AWS Step Function, що послідовно викликала Lambda-функції:
+   - `ValidateData`;
+   - `LogMetrics`.
+
+Pipeline завершився успішно зі статусом:
+
+```text
+Passed
 ```
 
-Де:
+Нижче наведено підтвердження успішного виконання GitLab Pipeline:
 
-- `source` — джерело запуску пайплайну;
-- `commit` — короткий SHA коміту (`CI_COMMIT_SHORT_SHA`).
+![GitLab Pipeline](./screenshots/gitlub-status.png)
+
+---
+
+У результаті виконання GitLab CI було створено новий execution у AWS Step Functions зі статусом:
+
+```text
+Succeeded
+```
+
+![AWS Step Function Execution](./screenshots/aws-train.png)
+
+---
+
+## Перенесення репозиторію з GitHub до GitLab
+
+Для виконання вимоги щодо використання GitLab CI/CD існуючий репозиторій було додатково розміщено у GitLab.
+
+### Створення проєкту в GitLab
+
+У GitLab було створено новий проєкт:
+
+```text
+goit-mlops-hw
+```
+
+### Додавання GitLab як додаткового remote
+
+У локальному репозиторії було додано GitLab-репозиторій як новий віддалений репозиторій:
+
+```bash
+git remote add gitlab https://gitlab.com/goit12/goit-mlops-hw.git
+```
+
+Перевірка налаштованих remote:
+
+```bash
+git remote gitlab
+```
+
+![Gitlub Git Remote](./screenshots/git-remote-gitlub.png)
+
+
+### Публікація гілки `lesson-10` у GitLab
+
+Після налаштування доступу до GitLab було виконано публікацію гілки:
+
+```bash
+git push --set-upstream gitlab lesson-10
+```
+
+Після успішного виконання команди гілка `lesson-10` стала доступною в GitLab та використовувалась для запуску GitLab CI/CD Pipeline.
+
+Посилання на репозиторій GitLab:
+
+```text
+https://gitlab.com/goit12/goit-mlops-hw/-/tree/lesson-10
+```
+
+![Gitlub Git Remote](./screenshots/gitlub-lesson10.png)
 
 ---
 
