@@ -3,8 +3,11 @@ stages:
 
 train-model:
   stage: train
-  image: amazon/aws-cli:2.15.0
+  image:
+    name: amazon/aws-cli:2.15.0
+    entrypoint: [""]
   script:
+    - aws --version
     - aws stepfunctions start-execution --state-machine-arn "$STEP_FUNCTION_ARN" --name "train-$(date +%s)" --input "{\"source\":\"gitlab-ci\",\"commit\":\"$CI_COMMIT_SHORT_SHA\"}"
   only:
     - lesson-10
