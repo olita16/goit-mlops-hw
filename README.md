@@ -331,6 +331,40 @@ Succeeded
 
 ---
 
+## JSON, що передається через GitLab CI
+
+Під час запуску GitLab Pipeline до AWS Step Functions передаються параметри у форматі JSON.
+
+Команда запуску:
+
+```bash
+aws stepfunctions start-execution \
+  --state-machine-arn "$STEP_FUNCTION_ARN" \
+  --name "train-$(date +%s)" \
+  --input "{\"source\":\"gitlab-ci\",\"commit\":\"$CI_COMMIT_SHORT_SHA\"}"
+```
+
+Приклад переданого JSON:
+
+```json
+{
+  "source": "gitlab-ci",
+  "commit": "abc123"
+}
+```
+
+Де:
+
+- `source` — джерело запуску пайплайну;
+- `commit` — короткий SHA коміту GitLab (`CI_COMMIT_SHORT_SHA`).
+
+Нижче наведено приклад успішного виконання Step Function, запущеної через GitLab CI:
+
+![GitLab Step Function Execution](./screenshots/aws-train-logs.png)
+
+
+---
+
 ## Перенесення репозиторію з GitHub до GitLab
 
 Для виконання вимоги щодо використання GitLab CI/CD існуючий репозиторій було додатково розміщено у GitLab.
@@ -354,7 +388,7 @@ git remote add gitlab https://gitlab.com/goit12/goit-mlops-hw.git
 Перевірка налаштованих remote:
 
 ```bash
-git remote gitlab
+git remote -v
 ```
 
 ![Gitlub Git Remote](./screenshots/git-remote-gitlub.png)
